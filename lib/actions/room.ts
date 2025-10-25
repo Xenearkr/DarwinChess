@@ -18,15 +18,15 @@ export async function createRoom() {
     return redirect("/auth/login");
   }
 
-  const { data, error } = await supabase
+  const { data: room, error } = await supabase
     .from("rooms")
     .insert({
       player_one_id: user.id,
-      status: "waiting",
-      board_state: INITIAL_FEN,
       current_turn: user.id,
+      board_state:
+        "rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1",
     })
-    .select("id")
+    .select()
     .single();
 
   if (error) {
@@ -34,8 +34,11 @@ export async function createRoom() {
     return redirect("/lobby?error=Could not create room");
   }
 
-  revalidatePath("/lobby");
-  redirect(`/game/${data.id}`);
+  if (room) {
+    redirect(`/game/${room.id}`);
+  } else {
+    redirect("/lobby?error=Failed to create room and get its ID");
+  }
 }
 
 export async function joinRoom(roomId: string) {

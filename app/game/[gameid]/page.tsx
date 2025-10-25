@@ -32,14 +32,12 @@ export default async function GamePage({
   if (!room) {
     return (
       <div className="flex-1 w-full flex flex-col items-center justify-center gap-4 p-4 text-center">
-        <h1 className="text-2xl font-bold">Room Not Found</h1>
+        <h1 className="text-2xl font-bold">未找到房间</h1>
         <p className="text-foreground/80 max-w-sm">
-          The room you are looking for does not exist, has been deleted, or you
-          do not have permission to view it. It might also be a temporary sync
-          issue.
+          您查找的房间不存在、已被删除，或者您没有权限查看。这也可能是一个临时的同步问题。
         </p>
         <Button asChild variant="outline" className="mt-4">
-          <Link href="/lobby">← Back to Lobby</Link>
+          <Link href="/lobby">← 返回大厅</Link>
         </Button>
       </div>
     );
@@ -54,37 +52,39 @@ export default async function GamePage({
     <div className="flex-1 w-full flex flex-col items-center gap-8 p-4">
       <div className="w-full max-w-4xl">
         <Button asChild variant="outline">
-          <Link href="/lobby">← Back to Lobby</Link>
+          <Link href="/lobby">← 返回大厅</Link>
         </Button>
       </div>
       <div className="w-full max-w-4xl text-center">
-        <h1 className="text-2xl font-bold">Game Room</h1>
+        <h1 className="text-2xl font-bold">游戏室</h1>
         <p className="text-sm text-foreground/70">ID: {room.id}</p>
       </div>
 
       <div className="border rounded-lg p-8 w-full max-w-md aspect-square bg-background shadow-lg">
         <div className="flex flex-col items-center justify-center h-full">
-          <h2 className="text-xl font-semibold">Chess Board</h2>
-          <p className="text-foreground/60">(Logic to be implemented)</p>
+          <h2 className="text-xl font-semibold">棋盘</h2>
+          <p className="text-foreground/60">(逻辑待实现)</p>
         </div>
       </div>
 
       <div className="w-full max-w-md text-center flex flex-col gap-4">
         <div className="p-4 border rounded-md">
-          <h3 className="font-semibold mb-2">Game Info</h3>
-          <p>Status: {room.status}</p>
-          <p>Player 1: {room.player_one_id.slice(0, 8)}...</p>
-          <p>Player 2: {room.player_two_id?.slice(0, 8) ?? "Waiting..."}</p>
+          <h3 className="font-semibold mb-2">对局信息</h3>
+          <p>状态: {room.status}</p>
+          <p>玩家一: {room.player_one_id.slice(0, 8)}...</p>
+          <p>
+            玩家二: {room.player_two_id?.slice(0, 8) ?? "等待中..."}
+          </p>
         </div>
         {canJoin && (
           <form action={joinRoom.bind(null, room.id)}>
             <Button type="submit" className="w-full">
-              Join Game
+              加入对局
             </Button>
           </form>
         )}
         {!isPlayer && room.status !== "waiting" && (
-          <p className="text-destructive">This game is already in progress.</p>
+          <p className="text-destructive">该对局已在进行中。</p>
         )}
       </div>
     </div>
