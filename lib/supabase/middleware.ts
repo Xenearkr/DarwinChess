@@ -47,7 +47,15 @@ export async function updateSession(request: NextRequest) {
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
 
+  // If user is logged in and tries to access the home page, redirect to lobby
+  if (user && request.nextUrl.pathname === "/") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/lobby";
+    return NextResponse.redirect(url);
+  }
+
   if (
+    !request.nextUrl.pathname.startsWith("/_next") && // Exclude Next.js internal paths
     request.nextUrl.pathname !== "/" &&
     !user &&
     !request.nextUrl.pathname.startsWith("/login") &&
